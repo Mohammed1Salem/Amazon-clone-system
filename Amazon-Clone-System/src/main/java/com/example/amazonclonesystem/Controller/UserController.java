@@ -56,4 +56,15 @@ public class UserController {
         return userService.addFunds(userId,amount) ? ResponseEntity.status(200).body(new ApiResponse("User funds increased"))
                 : ResponseEntity.status(400).body(new ApiResponse("no user found or funds not positive"));
     }
+    @PostMapping("/transfer-money/{fromUserId}/{toUserId}/{amount}")
+    public ResponseEntity<?> transferMoney(@PathVariable String fromUserId, @PathVariable String toUserId, @PathVariable double amount) {
+        return userService.transferMoney(fromUserId, toUserId, amount) ?
+                ResponseEntity.status(200).body(new ApiResponse("Money transferred successfully")) :
+                ResponseEntity.status(400).body(new ApiResponse("Transfer failed: check user IDs, balance, or amount"));
+    }
+    @PostMapping("/buy-product-shared/{user1Id}/{user2Id}/{productId}/{merchantId}")
+    public ResponseEntity<?> buyProductWithTwoUsers(@PathVariable String user1Id, @PathVariable String user2Id,@PathVariable String productId, @PathVariable String merchantId) {
+        return userService.buyProductWithTwoUsers(user1Id, user2Id, productId, merchantId) ? ResponseEntity.status(200).body(new ApiResponse("Product purchased successfully with shared payment"))
+                : ResponseEntity.status(400).body(new ApiResponse("Purchase failed: check user IDs, balances, product, merchant, or stock"));
+    }
 }

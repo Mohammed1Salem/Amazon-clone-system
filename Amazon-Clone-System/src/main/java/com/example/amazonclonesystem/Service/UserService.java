@@ -48,6 +48,7 @@ public class UserService {
 
     public boolean buyProduct(String userId, String productId, String merchantId) {
 
+
         User user = null;
         for (User u : getUsers()) {
             if (u.getId().equals(userId)) {
@@ -106,5 +107,84 @@ public class UserService {
         return false;
     }
 
+    public boolean transferMoney(String fromUserId, String toUserId, double amount) {
+        if (amount <= 0) return false;
+
+        User fromUser = null;
+        User toUser = null;
+
+        for (User user : users) {
+            if (user.getId().equals(fromUserId)) {
+                fromUser = user;
+            }
+            if (user.getId().equals(toUserId)) {
+                toUser = user;
+            }
+        }
+
+        if (fromUser == null || toUser == null || fromUser.getBalance() < amount) {
+            return false;
+        }
+
+        fromUser.setBalance(fromUser.getBalance() - amount);
+        toUser.setBalance(toUser.getBalance() + amount);
+
+        return true;
+    }
+
+    public boolean buyProductWithTwoUsers(String user1Id, String user2Id, String productId, String merchantId) {
+        User user1 = null;
+        User user2 = null;
+
+        for (User user : users) {
+            if (user.getId().equals(user1Id)) {
+                user1 = user;
+            }
+            if (user.getId().equals(user2Id)) {
+                user2 = user;
+            }
+        }
+        if (user1 == null || user2 == null) return false;
+
+        Product product = null;
+        for (Product p : productService.getProducts()) {
+            if (p.getId().equals(productId)) {
+                product = p;
+                break;
+            }
+        }
+        if (product == null) return false;
+
+        Merchant merchant = null;
+        for (Merchant m : merchantService.getMerchants()) {
+            if (m.getId().equals(merchantId)) {
+                merchant = m;
+                break;
+            }
+        }
+        if (merchant == null) return false;
+
+        MerchantStock stock = null;
+        for (MerchantStock ms : merchantStockService.getMerchantStocks()) {
+            if (ms.getMerchantId().equals(merchantId) &&
+                    ms.getProductId().equals(productId)) {
+                stock = ms;
+                break;
+            }
+        }
+        if (stock == null || stock.getStock() <= 0) return false;
+
+        double halfPrice = product.getPrice() / 2;
+
+        if (user1.getBalance() < halfPrice || user2.getBalance() < halfPrice) {
+            return false;
+        }
+
+        user1.setBalance(user1.getBalance() - halfPrice);
+        user2.setBalance(user2.getBalance() - halfPrice);
+        stock.setStock(stock.getStock() - 1);
+
+        return true;
+    }
 
 }

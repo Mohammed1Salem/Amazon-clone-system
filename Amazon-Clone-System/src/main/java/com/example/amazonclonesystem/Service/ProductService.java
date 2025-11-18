@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 @Service
 @RequiredArgsConstructor
@@ -49,12 +50,23 @@ public class ProductService {
         return false;
     }
 
-    public ArrayList<Product> getProductsByCategory(String categoryId) {
-
+    public ArrayList<Product> getLowestProductsByCategory(String categoryId) {
         ArrayList<Product> result = new ArrayList<>();
 
         for (Product product : products) {
             if (product.getCategoryId().equals(categoryId)) {
+                result.add(product);
+            }
+        }
+
+        result.sort(Comparator.comparing(Product::getPrice)) ;
+        return result;
+    }
+
+    public ArrayList<Product> getProductsInPriceRange(double minPrice, double maxPrice) {
+        ArrayList<Product> result = new ArrayList<>();
+        for (Product product : products) {
+            if (product.getPrice() >= minPrice && product.getPrice() <= maxPrice) {
                 result.add(product);
             }
         }

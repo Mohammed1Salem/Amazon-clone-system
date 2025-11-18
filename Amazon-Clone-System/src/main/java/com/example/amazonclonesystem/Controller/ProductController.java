@@ -48,8 +48,14 @@ public class ProductController {
     }
 
     @GetMapping("/get-by-category/{categoryId}")
-    public ResponseEntity<?> getByCategory(@PathVariable String categoryId) {
-        return (!productService.getProductsByCategory(categoryId).isEmpty()) ? ResponseEntity.status(200).body(productService.getProductsByCategory(categoryId))
+    public ResponseEntity<?> getLowestProductsByCategory(@PathVariable String categoryId) {
+        return (!productService.getLowestProductsByCategory(categoryId).isEmpty()) ? ResponseEntity.status(200).body(productService.getLowestProductsByCategory(categoryId))
                 : ResponseEntity.status(400).body(new ApiResponse("Category or Products not found"));
+    }
+    @GetMapping("/get-by-price-range")
+    public ResponseEntity<?> getProductsInPriceRange(@RequestParam double minPrice, @RequestParam double maxPrice) {
+        return (!productService.getProductsInPriceRange(minPrice, maxPrice).isEmpty()) ?
+                ResponseEntity.status(200).body(productService.getProductsInPriceRange(minPrice, maxPrice))
+                : ResponseEntity.status(400).body(new ApiResponse("No products found in this price range"));
     }
 }

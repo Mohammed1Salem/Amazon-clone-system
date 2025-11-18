@@ -102,7 +102,7 @@ public class MerchantStockService {
         ArrayList<Product> availableProducts = new ArrayList<>();
         
         for (MerchantStock stock : merchantStocks) {
-            if (stock.getMerchantId().equals(merchantId)) {
+            if (stock.getMerchantId().equals(merchantId) && stock.getStock() > 0) {
                 for (Product product : productService.getProducts()) {
                     if (product.getId().equals(stock.getProductId())) {
                         availableProducts.add(product);

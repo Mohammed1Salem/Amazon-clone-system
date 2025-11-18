@@ -37,16 +37,4 @@ public class MerchantService {
         }
         return false;
     }
-
-    public ArrayList<Merchant> getMerchantsStartingWith(char letter){
-        ArrayList<Merchant> result = new ArrayList<>();
-        for (Merchant merchant : merchants){
-            if (merchant.getName().toLowerCase().startsWith(String.valueOf(letter).toLowerCase())){
-                result.add(merchant);
-            }
-        }
-        return result;
-    }
-
-
 }
