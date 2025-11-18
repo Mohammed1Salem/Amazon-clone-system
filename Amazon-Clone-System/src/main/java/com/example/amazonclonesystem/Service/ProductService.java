@@ -73,4 +73,17 @@ public class ProductService {
         return result;
     }
 
+    public ArrayList<Product> getHighestProductsByCategory(String categoryId) {
+        ArrayList<Product> result = new ArrayList<>();
+
+        for (Product product : products) {
+            if (product.getCategoryId().equals(categoryId)) {
+                result.add(product);
+            }
+        }
+
+        result.sort(Comparator.comparing(Product::getPrice).reversed()) ;
+        return result;
+    }
+
 }

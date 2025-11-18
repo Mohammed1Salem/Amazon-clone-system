@@ -58,4 +58,9 @@ public class ProductController {
                 ResponseEntity.status(200).body(productService.getProductsInPriceRange(minPrice, maxPrice))
                 : ResponseEntity.status(400).body(new ApiResponse("No products found in this price range"));
     }
+    @GetMapping("/get-by-category/{categoryId}")
+    public ResponseEntity<?> getHighestProductsByCategory(@PathVariable String categoryId) {
+        return (!productService.getHighestProductsByCategory(categoryId).isEmpty()) ? ResponseEntity.status(200).body(productService.getHighestProductsByCategory(categoryId))
+                : ResponseEntity.status(400).body(new ApiResponse("Category or Products not found"));
+    }
 }
